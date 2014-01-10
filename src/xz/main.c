@@ -70,9 +70,9 @@ read_name(const args_info *args)
 	// use xmalloc() and xrealloc() in this function, because while
 	// executing this function, no files are open for writing, and thus
 	// there's no need to cleanup anything before exiting.
-	if (name == NULL)
+	if (name == NULL) {
 		name = xmalloc(size);
-
+	}
 	// Write position in name
 	size_t pos = 0;
 
@@ -220,6 +220,7 @@ main(int argc, char **argv)
 			if (opt_mode == MODE_COMPRESS) {
 				if (is_tty_stdout())
 					continue;
+
 			} else if (is_tty_stdin()) {
 				continue;
 			}

@@ -78,9 +78,9 @@ tuklib_physmem(void)
 		// code working also on older Windows versions, use
 		// GlobalMemoryStatusEx() conditionally.
 		HMODULE kernel32 = GetModuleHandle("kernel32.dll");
+		typedef BOOL(WINAPI *gmse_t)(LPMEMORYSTATUSEX);
 		if (kernel32 != NULL) {
-			BOOL (WINAPI *gmse)(LPMEMORYSTATUSEX) = GetProcAddress(
-					kernel32, "GlobalMemoryStatusEx");
+			gmse_t gmse = (gmse_t)GetProcAddress(kernel32, "GlobalMemoryStatusEx");
 			if (gmse != NULL) {
 				MEMORYSTATUSEX meminfo;
 				meminfo.dwLength = sizeof(meminfo);

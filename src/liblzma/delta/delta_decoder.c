@@ -59,9 +59,9 @@ extern lzma_ret
 lzma_delta_props_decode(void **options, const lzma_allocator *allocator,
 		const uint8_t *props, size_t props_size)
 {
-	if (props_size != 1)
+	if (props_size != 1) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	lzma_options_delta *opt
 			= lzma_alloc(sizeof(lzma_options_delta), allocator);
 	if (opt == NULL)

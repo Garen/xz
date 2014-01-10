@@ -175,9 +175,9 @@ lzma_filters_update(lzma_stream *strm, const lzma_filter *filters)
 		return LZMA_PROG_ERROR;
 
 	// Validate the filter chain.
-	if (lzma_raw_encoder_memusage(filters) == UINT64_MAX)
+	if (lzma_raw_encoder_memusage(filters) == UINT64_MAX) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	// The actual filter chain in the encoder is reversed. Some things
 	// still want the normal order chain, so we provide both.
 	size_t count = 1;

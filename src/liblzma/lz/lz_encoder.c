@@ -83,9 +83,9 @@ fill_window(lzma_coder *coder, const lzma_allocator *allocator,
 	assert(coder->mf.read_pos <= coder->mf.write_pos);
 
 	// Move the sliding window if needed.
-	if (coder->mf.read_pos >= coder->mf.size - coder->mf.keep_size_after)
+	if (coder->mf.read_pos >= coder->mf.size - coder->mf.keep_size_after) {
 		move_window(&coder->mf);
-
+	}
 	// Maybe this is ugly, but lzma_mf uses uint32_t for most things
 	// (which I find cleanest), but we need size_t here when filling
 	// the history window.
@@ -209,9 +209,9 @@ lz_encoder_prepare(lzma_mf *mf, const lzma_allocator *allocator,
 	//   - Memory usage calculation needs something too, e.g. use uint64_t
 	//     for mf->size.
 	uint32_t reserve = lz_options->dict_size / 2;
-	if (reserve > (UINT32_C(1) << 30))
+	if (reserve > (UINT32_C(1) << 30)) {
 		reserve /= 2;
-
+	}
 	reserve += (lz_options->before_size + lz_options->match_len_max
 			+ lz_options->after_size) / 2 + (UINT32_C(1) << 19);
 
@@ -286,9 +286,9 @@ lz_encoder_prepare(lzma_mf *mf, const lzma_allocator *allocator,
 	// Calculate the sizes of mf->hash and mf->son and check that
 	// nice_len is big enough for the selected match finder.
 	const uint32_t hash_bytes = lz_options->match_finder & 0x0F;
-	if (hash_bytes > mf->nice_len)
+	if (hash_bytes > mf->nice_len) {
 		return true;
-
+	}
 	const bool is_bt = (lz_options->match_finder & 0x10) != 0;
 	uint32_t hs;
 
@@ -335,9 +335,9 @@ lz_encoder_prepare(lzma_mf *mf, const lzma_allocator *allocator,
 	const uint32_t old_count = mf->hash_size_sum + mf->sons_count;
 	mf->hash_size_sum = hs;
 	mf->sons_count = mf->cyclic_size;
-	if (is_bt)
+	if (is_bt) {
 		mf->sons_count *= 2;
-
+	}
 	const uint32_t new_count = mf->hash_size_sum + mf->sons_count;
 
 	// Deallocate the old hash array if it exists and has different size

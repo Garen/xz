@@ -29,7 +29,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+
+#if !defined(_MSC_VER) && !defined(__CYGWIN__)
+  #include <unistd.h>
+#endif
 
 #ifdef __VMS
 # include <unixlib.h>

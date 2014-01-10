@@ -14,6 +14,11 @@
 
 #include <stdarg.h>
 
+#if _MSC_VER
+#include <io.h>
+#define fileno _fileno
+#define isatty _isatty
+#endif
 
 /// Number of the current file
 static unsigned int files_pos = 0;
@@ -392,9 +397,9 @@ progress_time(uint64_t mseconds)
 	uint32_t seconds = mseconds / 1000;
 
 	// Don't show anything if the time is zero or ridiculously big.
-	if (seconds == 0 || seconds > ((9999 * 60) + 59) * 60 + 59)
+	if (seconds == 0 || seconds > ((9999 * 60) + 59) * 60 + 59) {
 		return "";
-
+	}
 	uint32_t minutes = seconds / 60;
 	seconds %= 60;
 
@@ -427,9 +432,9 @@ progress_remaining(uint64_t in_pos, uint64_t elapsed)
 	//  - Only a few seconds has passed since we started (de)compressing,
 	//    so estimate would be too inaccurate.
 	if (expected_in_size == 0 || in_pos > expected_in_size
-			|| in_pos < (UINT64_C(1) << 19) || elapsed < 8000)
+		|| in_pos < (UINT64_C(1) << 19) || elapsed < 8000) {
 		return "";
-
+	}
 	// Calculate the estimate. Don't give an estimate of zero seconds,
 	// since it is possible that all the input has been already passed
 	// to the library, but there is still quite a bit of output pending.
@@ -529,9 +534,9 @@ progress_pos(uint64_t *in_pos,
 extern void
 message_progress_update(void)
 {
-	if (!progress_needs_updating)
+	if (!progress_needs_updating) {
 		return;
-
+	}
 	// Calculate how long we have been processing this file.
 	const uint64_t elapsed = mytime_get_elapsed();
 
@@ -552,9 +557,9 @@ message_progress_update(void)
 	signals_block();
 
 	// Print the filename if it hasn't been printed yet.
-	if (!current_filename_printed)
+	if (!current_filename_printed) {
 		print_filename();
-
+	}
 	// Print the actual progress message. The idea is that there is at
 	// least three spaces between the fields in typical situations, but
 	// even in rare situations there is at least one space.
@@ -613,9 +618,9 @@ message_progress_update(void)
 static void
 progress_flush(bool finished)
 {
-	if (!progress_started || verbosity < V_VERBOSE)
+	if (!progress_started || verbosity < V_VERBOSE) {
 		return;
-
+	}
 	uint64_t in_pos;
 	uint64_t compressed_pos;
 	uint64_t uncompressed_pos;
@@ -672,9 +677,9 @@ progress_flush(bool finished)
 
 		// The speed and elapsed time aren't always shown.
 		const char *speed = progress_speed(uncompressed_pos, elapsed);
-		if (speed[0] != '\0')
+		if (speed[0] != '\0') {
 			fprintf(stderr, ", %s", speed);
-
+		}
 		const char *elapsed_str = progress_time(elapsed);
 		if (elapsed_str[0] != '\0')
 			fprintf(stderr, ", %s", elapsed_str);

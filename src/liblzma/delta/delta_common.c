@@ -39,9 +39,9 @@ lzma_delta_coder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 	}
 
 	// Validate the options.
-	if (lzma_delta_coder_memusage(filters[0].options) == UINT64_MAX)
+	if (lzma_delta_coder_memusage(filters[0].options) == UINT64_MAX) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	// Set the delta distance.
 	const lzma_options_delta *opt = filters[0].options;
 	next->coder->distance = opt->dist;

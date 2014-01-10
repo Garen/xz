@@ -274,9 +274,9 @@ coder_set_compression_settings(void)
 	}
 #endif
 
-	if (memory_usage <= memory_limit)
+	if (memory_usage <= memory_limit) {
 		return;
-
+	}
 	// Look for the last filter if it is LZMA2 or LZMA1, so we can make
 	// it use less RAM. With other filters we don't know what to do.
 	size_t i = 0;
@@ -347,14 +347,14 @@ static bool
 is_format_lzma(void)
 {
 	// The .lzma header is 13 bytes.
-	if (strm.avail_in < 13)
+	if (strm.avail_in < 13) {
 		return false;
-
+	}
 	// Decode the LZMA1 properties.
 	lzma_filter filter = { .id = LZMA_FILTER_LZMA1 };
-	if (lzma_properties_decode(&filter, NULL, in_buf.u8, 5) != LZMA_OK)
+	if (lzma_properties_decode(&filter, NULL, in_buf.u8, 5) != LZMA_OK) {
 		return false;
-
+	}
 	// A hack to ditch tons of false positives: We allow only dictionary
 	// sizes that are 2^n or 2^n + 2^(n-1) or UINT32_MAX. LZMA_Alone
 	// created only files with 2^n, but accepts any dictionary size.

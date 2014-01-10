@@ -280,9 +280,9 @@ lzma_lzma2_props_decode(void **options, const lzma_allocator *allocator,
 		return LZMA_OPTIONS_ERROR;
 
 	// Decode the dictionary size.
-	if (props[0] > 40)
+	if (props[0] > 40) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	lzma_options_lzma *opt = lzma_alloc(
 			sizeof(lzma_options_lzma), allocator);
 	if (opt == NULL)

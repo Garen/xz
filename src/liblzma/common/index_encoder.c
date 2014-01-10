@@ -225,9 +225,9 @@ lzma_index_buffer_encode(const lzma_index *i,
 		return LZMA_PROG_ERROR;
 
 	// Don't try to encode if there's not enough output space.
-	if (out_size - *out_pos < lzma_index_size(i))
+	if (out_size - *out_pos < lzma_index_size(i)) {
 		return LZMA_BUF_ERROR;
-
+	}
 	// The Index encoder needs just one small data structure so we can
 	// allocate it on stack.
 	lzma_coder coder;

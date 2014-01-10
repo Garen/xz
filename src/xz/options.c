@@ -82,10 +82,10 @@ parse_options(const char *str, const option_map *opts,
 		if (value != NULL)
 			*value++ = '\0';
 
-		if (value == NULL || value[0] == '\0')
+		if (value == NULL || value[0] == '\0') {
 			message_fatal(_("%s: Options must be `name=value' "
 					"pairs separated with commas"), str);
-
+		}
 		// Look for the option name from the option map.
 		size_t i = 0;
 		while (true) {
@@ -255,9 +255,9 @@ set_lzma(void *options, uint32_t key, uint64_t value, const char *valuestr)
 
 	switch (key) {
 	case OPT_PRESET: {
-		if (valuestr[0] < '0' || valuestr[0] > '9')
+		if (valuestr[0] < '0' || valuestr[0] > '9') {
 			error_lzma_preset(valuestr);
-
+		}
 		uint32_t preset = valuestr[0] - '0';
 
 		// Currently only "e" is supported as a modifier,
@@ -346,18 +346,21 @@ options_lzma(const char *str)
 	};
 
 	lzma_options_lzma *options = xmalloc(sizeof(lzma_options_lzma));
-	if (lzma_lzma_preset(options, LZMA_PRESET_DEFAULT))
+	if (lzma_lzma_preset(options, LZMA_PRESET_DEFAULT)) {
 		message_bug();
+	}
 
 	parse_options(str, opts, &set_lzma, options);
 
-	if (options->lc + options->lp > LZMA_LCLP_MAX)
+	if (options->lc + options->lp > LZMA_LCLP_MAX) {
 		message_fatal(_("The sum of lc and lp must not exceed 4"));
+	}
 
 	const uint32_t nice_len_min = options->mf & 0x0F;
-	if (options->nice_len < nice_len_min)
+	if (options->nice_len < nice_len_min) {
 		message_fatal(_("The selected match finder requires at "
-				"least nice=%" PRIu32), nice_len_min);
+			"least nice=%" PRIu32), nice_len_min);
+	}
 
 	return options;
 }

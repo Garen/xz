@@ -111,9 +111,9 @@ lzma_delta_props_encode(const void *options, uint8_t *out)
 {
 	// The caller must have already validated the options, so it's
 	// LZMA_PROG_ERROR if they are invalid.
-	if (lzma_delta_coder_memusage(options) == UINT64_MAX)
+	if (lzma_delta_coder_memusage(options) == UINT64_MAX) {
 		return LZMA_PROG_ERROR;
-
+	}
 	const lzma_options_delta *opt = options;
 	out[0] = opt->dist - LZMA_DELTA_DIST_MIN;
 

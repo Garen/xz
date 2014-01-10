@@ -158,9 +158,9 @@ stream_encode(lzma_coder *coder, const lzma_allocator *allocator,
 				coder->block_encoder.coder, allocator,
 				in, in_pos, in_size,
 				out, out_pos, out_size, convert[action]);
-		if (ret != LZMA_STREAM_END || action == LZMA_SYNC_FLUSH)
+		if (ret != LZMA_STREAM_END || action == LZMA_SYNC_FLUSH) {
 			return ret;
-
+		}
 		// Add a new Index Record.
 		const lzma_vli unpadded_size = lzma_block_unpadded_size(
 				&coder->block_options);
@@ -180,9 +180,9 @@ stream_encode(lzma_coder *coder, const lzma_allocator *allocator,
 				coder->index_encoder.coder, allocator,
 				NULL, NULL, 0,
 				out, out_pos, out_size, LZMA_RUN);
-		if (ret != LZMA_STREAM_END)
+		if (ret != LZMA_STREAM_END) {
 			return ret;
-
+		}
 		// Encode the Stream Footer into coder->buffer.
 		const lzma_stream_flags stream_flags = {
 			.version = 0,
@@ -191,8 +191,8 @@ stream_encode(lzma_coder *coder, const lzma_allocator *allocator,
 		};
 
 		if (lzma_stream_footer_encode(&stream_flags, coder->buffer)
-				!= LZMA_OK)
-			return LZMA_PROG_ERROR;
+			!= LZMA_OK)
+				return LZMA_PROG_ERROR;
 
 		coder->buffer_size = LZMA_STREAM_HEADER_SIZE;
 		coder->sequence = SEQ_STREAM_FOOTER;
@@ -294,9 +294,9 @@ stream_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 	// Initialize the Index
 	lzma_index_end(next->coder->index, allocator);
 	next->coder->index = lzma_index_init(allocator);
-	if (next->coder->index == NULL)
+	if (next->coder->index == NULL) {
 		return LZMA_MEM_ERROR;
-
+	}
 	// Encode the Stream Header
 	lzma_stream_flags stream_flags = {
 		.version = 0,

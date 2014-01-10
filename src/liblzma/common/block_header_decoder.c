@@ -52,9 +52,9 @@ lzma_block_header_decode(lzma_block *block,
 	// Validate Block Header Size and Check type. The caller must have
 	// already set these, so it is a programming error if this test fails.
 	if (lzma_block_header_size_decode(in[0]) != block->header_size
-			|| (unsigned int)(block->check) > LZMA_CHECK_ID_MAX)
+			|| (unsigned int)(block->check) > LZMA_CHECK_ID_MAX) {
 		return LZMA_PROG_ERROR;
-
+	}
 	// Exclude the CRC32 field.
 	const size_t in_size = block->header_size - 4;
 
@@ -63,9 +63,9 @@ lzma_block_header_decode(lzma_block *block,
 		return LZMA_DATA_ERROR;
 
 	// Check for unsupported flags.
-	if (in[1] & 0x3C)
+	if (in[1] & 0x3C) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	// Start after the Block Header Size and Block Flags fields.
 	size_t in_pos = 2;
 

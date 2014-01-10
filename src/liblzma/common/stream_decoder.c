@@ -263,9 +263,9 @@ stream_decode(lzma_coder *coder, const lzma_allocator *allocator,
 		// If we don't have any input, don't call
 		// lzma_index_hash_decode() since it would return
 		// LZMA_BUF_ERROR, which we must not do here.
-		if (*in_pos >= in_size)
+		if (*in_pos >= in_size) {
 			return LZMA_OK;
-
+		}
 		// Decode the Index and compare it to the hash calculated
 		// from the sizes of the Blocks (if any).
 		const lzma_ret ret = lzma_index_hash_decode(coder->index_hash,

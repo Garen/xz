@@ -14,8 +14,13 @@
 #ifndef MY_BUILD
 # define MY_BUILD 0
 #endif
+
 #define MY_VERSION LZMA_VERSION_MAJOR,LZMA_VERSION_MINOR,LZMA_VERSION_PATCH,MY_BUILD
 
+#define MY_TYPE        VFT_APP
+//#define MY_DESC        "common code for xz data compression utilities"
+//#define MY_NAME        "xzcommon"
+//#define MY_SUFFIX      ".dll"
 #define MY_FILENAME    MY_NAME MY_SUFFIX
 #define MY_COMPANY     "The Tukaani Project <http://tukaani.org/>"
 #define MY_PRODUCT     PACKAGE_NAME " <" PACKAGE_URL ">"

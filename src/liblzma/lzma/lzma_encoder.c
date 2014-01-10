@@ -314,9 +314,9 @@ lzma_lzma_encode(lzma_coder *restrict coder, lzma_mf *restrict mf,
 		size_t out_size, uint32_t limit)
 {
 	// Initialize the stream if no data has been encoded yet.
-	if (!coder->is_initialized && !encode_init(coder, mf))
+	if (!coder->is_initialized && !encode_init(coder, mf)) {
 		return LZMA_OK;
-
+	}
 	// Get the lowest bits of the uncompressed offset from the LZ layer.
 	uint32_t position = mf_position(mf);
 
@@ -626,9 +626,9 @@ lzma_lzma_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 extern uint64_t
 lzma_lzma_encoder_memusage(const void *options)
 {
-	if (!is_options_valid(options))
+	if (!is_options_valid(options)) {
 		return UINT64_MAX;
-
+	}
 	lzma_lz_options lz_options;
 	set_lz_options(&lz_options, options);
 

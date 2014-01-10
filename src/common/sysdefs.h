@@ -189,4 +189,17 @@ typedef unsigned char _Bool;
 #	define lzma_attr_alloc_size(x)
 #endif
 
+#if _MSC_VER
+#	define WIN32_LEAN_AND_MEAN
+#   include <windows.h>
+#   include <basetsd.h> // SSIZE_T
+#   define ssize_t SSIZE_T
+#   define inline __inline
+#   define restrict __restrict
+#   define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
+#   define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
+#   define snprintf _snprintf
+#   define strcasecmp _stricmp
+#endif
+
 #endif

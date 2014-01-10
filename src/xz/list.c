@@ -420,9 +420,9 @@ parse_block_header(file_pair *pair, const lzma_index_iter *iter,
 		return true;
 
 	// Zero would mean Index Indicator and thus not a valid Block.
-	if (buf.u8[0] == 0)
+	if (buf.u8[0] == 0) {
 		goto data_error;
-
+	}
 	// Initialize the block structure and decode Block Header Size.
 	lzma_filter filters[LZMA_FILTERS_MAX + 1];
 	lzma_block block;
@@ -608,9 +608,9 @@ parse_details(file_pair *pair, const lzma_index_iter *iter,
 static const char *
 get_ratio(uint64_t compressed_size, uint64_t uncompressed_size)
 {
-	if (uncompressed_size == 0)
+	if (uncompressed_size == 0) {
 		return "---";
-
+	}
 	const double ratio = (double)(compressed_size)
 			/ (double)(uncompressed_size);
 	if (ratio > 9.999)
@@ -827,9 +827,9 @@ print_info_adv(xz_file_info *xfi, file_pair *pair)
 
 		// Iterate over the Blocks.
 		while (!lzma_index_iter_next(&iter, LZMA_INDEX_ITER_BLOCK)) {
-			if (detailed && parse_details(pair, &iter, &bhi, xfi))
-					return true;
-
+			if (detailed && parse_details(pair, &iter, &bhi, xfi)) {
+				return true;
+			}
 			const char *cols1[4] = {
 				uint64_to_str(iter.stream.number, 0),
 				uint64_to_str(
@@ -1153,9 +1153,9 @@ list_file(const char *filename)
 	opt_stdout = false;
 	opt_force = true;
 	file_pair *pair = io_open_src(filename);
-	if (pair == NULL)
+	if (pair == NULL) {
 		return;
-
+	}
 	xz_file_info xfi = XZ_FILE_INFO_INIT;
 	if (!parse_indexes(&xfi, pair)) {
 		bool fail;

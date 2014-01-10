@@ -16,7 +16,7 @@
 #include "block_buffer_encoder.h"
 #include "index_encoder.h"
 #include "outqueue.h"
-
+#include "mythread.h"
 
 /// Maximum supported block size. This makes it simpler to prevent integer
 /// overflows if we are given unusually large block size.
@@ -257,9 +257,9 @@ worker_encode(worker_thread *thr, worker_state state)
 		}
 
 		// Return if we were asked to stop or exit.
-		if (state >= THR_STOP)
+		if (state >= THR_STOP) {
 			return state;
-
+		}
 		lzma_action action = state == THR_FINISH
 				? LZMA_FINISH : LZMA_RUN;
 
@@ -1088,9 +1088,9 @@ lzma_stream_encoder_mt_memusage(const lzma_mt *options)
 	uint64_t outbuf_size_max;
 
 	if (get_options(options, &easy, &filters, &block_size,
-			&outbuf_size_max) != LZMA_OK)
+		&outbuf_size_max) != LZMA_OK) {
 		return UINT64_MAX;
-
+	}
 	// Memory usage of the input buffers
 	const uint64_t inbuf_memusage = options->threads * block_size;
 
@@ -1105,9 +1105,9 @@ lzma_stream_encoder_mt_memusage(const lzma_mt *options)
 	// Memory usage of the output queue
 	const uint64_t outq_memusage = lzma_outq_memusage(
 			outbuf_size_max, options->threads);
-	if (outq_memusage == UINT64_MAX)
+	if (outq_memusage == UINT64_MAX) {
 		return UINT64_MAX;
-
+	}
 	// Sum them with overflow checking.
 	uint64_t total_memusage = LZMA_MEMUSAGE_BASE + sizeof(lzma_coder)
 			+ options->threads * sizeof(worker_thread);

@@ -70,9 +70,9 @@ decode_buffer(lzma_coder *coder,
 {
 	while (true) {
 		// Wrap the dictionary if needed.
-		if (coder->dict.pos == coder->dict.size)
+		if (coder->dict.pos == coder->dict.size) {
 			coder->dict.pos = 0;
-
+		}
 		// Store the current dictionary position. It is needed to know
 		// where to start copying to the out[] buffer.
 		const size_t dict_start = coder->dict.pos;

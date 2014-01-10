@@ -1,5 +1,5 @@
-/* How many MiB of RAM to assume if the real amount cannot be determined. */
-#define ASSUME_RAM 32
+/* How many MB of RAM to assume if the real amount cannot be determined. */
+#define ASSUME_RAM 128
 
 /* Define to 1 if crc32 integrity check is enabled. */
 #define HAVE_CHECK_CRC32 1
@@ -98,10 +98,13 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the <sys/time.h> header file. */
-#define HAVE_SYS_TIME_H 1
+#define HAVE_SYS_TIME_H 0
 
 /* Define to 1 if you have the `utimes' function. */
-#define HAVE_UTIMES 1
+//#define HAVE_UTIMES 1
+
+/* Define to 1 if you have the `utime' function. */
+#define HAVE_UTIME 1
 
 /* Define to 1 or 0, depending whether the compiler supports simple visibility
    declarations. */
@@ -124,6 +127,8 @@
 
 /* The size of `size_t', as computed by sizeof. */
 #define SIZEOF_SIZE_T 4
+
+#define MYTHREAD_VISTA 1
 
 /* Define to 1 if the system supports fast unaligned access to 16-bit and
    32-bit integers. */

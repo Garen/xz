@@ -558,9 +558,9 @@ helper2(lzma_coder *coder, uint32_t *reps, const uint8_t *buf,
 		}
 	}
 
-	if (buf_avail_full < 2)
+	if (buf_avail_full < 2) {
 		return len_end;
-
+	}
 	const uint32_t buf_avail = my_min(buf_avail_full, nice_len);
 
 	if (!next_is_literal && match_byte != current_byte) { // speed optimization
@@ -639,10 +639,9 @@ helper2(lzma_coder *coder, uint32_t *reps, const uint8_t *buf,
 
 		len_test = len_test_temp;
 
-		if (rep_index == 0)
+		if (rep_index == 0) {
 			start_len = len_test + 1;
-
-
+		}
 		uint32_t len_test_2 = len_test + 1;
 		const uint32_t limit = my_min(buf_avail_full,
 				len_test_2 + nice_len);
@@ -829,7 +828,7 @@ lzma_lzma_optimum_normal(lzma_coder *restrict coder, lzma_mf *restrict mf,
 		if (coder->match_price_count >= (1 << 7))
 			fill_dist_prices(coder);
 
-		if (coder->align_price_count >= ALIGN_SIZE)
+		if (coder->align_price_count >= ALIGN_SIZE) 
 			fill_align_prices(coder);
 	}
 
@@ -838,9 +837,9 @@ lzma_lzma_optimum_normal(lzma_coder *restrict coder, lzma_mf *restrict mf,
 	// more readable, since those two parts don't share many variables.
 
 	uint32_t len_end = helper1(coder, mf, back_res, len_res, position);
-	if (len_end == UINT32_MAX)
+	if (len_end == UINT32_MAX) {
 		return;
-
+	}
 	uint32_t reps[REPS];
 	memcpy(reps, coder->reps, sizeof(reps));
 

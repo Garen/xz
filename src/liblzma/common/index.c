@@ -398,9 +398,9 @@ extern LZMA_API(lzma_index *)
 lzma_index_init(const lzma_allocator *allocator)
 {
 	lzma_index *i = index_init_plain(allocator);
-	if (i == NULL)
+	if (i == NULL) {
 		return NULL;
-
+	}
 	index_stream *s = index_stream_init(0, 0, 1, 0, allocator);
 	if (s == NULL) {
 		lzma_free(i, allocator);
@@ -618,9 +618,9 @@ extern LZMA_API(lzma_ret)
 lzma_index_stream_padding(lzma_index *i, lzma_vli stream_padding)
 {
 	if (i == NULL || stream_padding > LZMA_VLI_MAX
-			|| (stream_padding & 3) != 0)
+			|| (stream_padding & 3) != 0) {
 		return LZMA_PROG_ERROR;
-
+	}
 	index_stream *s = (index_stream *)(i->streams.rightmost);
 
 	// Check that the new value won't make the file grow too big.
@@ -643,9 +643,9 @@ lzma_index_append(lzma_index *i, const lzma_allocator *allocator,
 	// Validate.
 	if (i == NULL || unpadded_size < UNPADDED_SIZE_MIN
 			|| unpadded_size > UNPADDED_SIZE_MAX
-			|| uncompressed_size > LZMA_VLI_MAX)
+			|| uncompressed_size > LZMA_VLI_MAX) {
 		return LZMA_PROG_ERROR;
-
+	}
 	index_stream *s = (index_stream *)(i->streams.rightmost);
 	index_group *g = (index_group *)(s->groups.rightmost);
 
@@ -788,7 +788,7 @@ lzma_index_cat(lzma_index *restrict dest, lzma_index *restrict src,
 				src->record_count, src->index_list_size);
 		if (vli_ceil4(dest_size + src_size) > LZMA_BACKWARD_SIZE_MAX)
 			return LZMA_DATA_ERROR;
-	}
+		}
 
 	// Optimize the last group to minimize memory usage. Allocation has
 	// to be done before modifying dest or src.
@@ -862,9 +862,9 @@ static index_stream *
 index_dup_stream(const index_stream *src, const lzma_allocator *allocator)
 {
 	// Catch a somewhat theoretical integer overflow.
-	if (src->record_count > PREALLOC_MAX)
+	if (src->record_count > PREALLOC_MAX) {
 		return NULL;
-
+	}
 	// Allocate and initialize a new Stream.
 	index_stream *dest = index_stream_init(src->node.compressed_base,
 			src->node.uncompressed_base, src->number,
@@ -1097,9 +1097,9 @@ extern LZMA_API(lzma_bool)
 lzma_index_iter_next(lzma_index_iter *iter, lzma_index_iter_mode mode)
 {
 	// Catch unsupported mode values.
-	if ((unsigned int)(mode) > LZMA_INDEX_ITER_NONEMPTY_BLOCK)
+	if ((unsigned int)(mode) > LZMA_INDEX_ITER_NONEMPTY_BLOCK) {
 		return true;
-
+	}
 	const lzma_index *i = iter->internal[ITER_INDEX].p;
 	const index_stream *stream = iter->internal[ITER_STREAM].p;
 	const index_group *group = NULL;
@@ -1206,9 +1206,9 @@ lzma_index_iter_locate(lzma_index_iter *iter, lzma_vli target)
 	const lzma_index *i = iter->internal[ITER_INDEX].p;
 
 	// If the target is past the end of the file, return immediately.
-	if (i->uncompressed_size <= target)
+	if (i->uncompressed_size <= target) {
 		return true;
-
+	}
 	// Locate the Stream containing the target offset.
 	const index_stream *stream = index_tree_locate(&i->streams, target);
 	assert(stream != NULL);

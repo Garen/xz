@@ -16,9 +16,9 @@
 extern LZMA_API(lzma_bool)
 lzma_check_is_supported(lzma_check type)
 {
-	if ((unsigned int)(type) > LZMA_CHECK_ID_MAX)
+	if ((unsigned int)(type) > LZMA_CHECK_ID_MAX) {
 		return false;
-
+	}
 	static const lzma_bool available_checks[LZMA_CHECK_ID_MAX + 1] = {
 		true,   // LZMA_CHECK_NONE
 
@@ -63,9 +63,9 @@ lzma_check_is_supported(lzma_check type)
 extern LZMA_API(uint32_t)
 lzma_check_size(lzma_check type)
 {
-	if ((unsigned int)(type) > LZMA_CHECK_ID_MAX)
+	if ((unsigned int)(type) > LZMA_CHECK_ID_MAX) {
 		return UINT32_MAX;
-
+	}
 	// See file-format.txt section 2.1.1.2.
 	static const uint8_t check_sizes[LZMA_CHECK_ID_MAX + 1] = {
 		0,

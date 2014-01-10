@@ -39,9 +39,9 @@ x86_code(lzma_simple *simple, uint32_t now_pos, bool is_encoder,
 	if (size < 5)
 		return 0;
 
-	if (now_pos - prev_pos > 5)
+	if (now_pos - prev_pos > 5) {
 		prev_pos = now_pos - 5;
-
+	}
 	const size_t limit = size - 5;
 	size_t buffer_pos = 0;
 

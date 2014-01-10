@@ -12,7 +12,7 @@
 
 #include "private.h"
 
-#if !(defined(HAVE_CLOCK_GETTIME) && HAVE_DECL_CLOCK_MONOTONIC)
+#if HAVE_SYS_TIME_H && !(defined(HAVE_CLOCK_GETTIME) && HAVE_DECL_CLOCK_MONOTONIC)
 #	include <sys/time.h>
 #endif
 
@@ -40,6 +40,8 @@ mytime_now(void)
 		clk_id = CLOCK_REALTIME;
 
 	return (uint64_t)(tv.tv_sec) * UINT64_C(1000) + tv.tv_nsec / 1000000;
+#elif defined(_WIN32)
+	return GetTickCount(); // milliseconds elapsed since the system started
 #else
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -77,13 +79,13 @@ mytime_set_flush_time(void)
 extern int
 mytime_get_flush_timeout(void)
 {
-	if (opt_flush_timeout == 0 || opt_mode != MODE_COMPRESS)
+	if (opt_flush_timeout == 0 || opt_mode != MODE_COMPRESS) {
 		return -1;
-
+	}
 	const uint64_t now = mytime_now();
-	if (now >= next_flush)
+	if (now >= next_flush) {
 		return 0;
-
+	}
 	const uint64_t remaining = next_flush - now;
 	return remaining > INT_MAX ? INT_MAX : (int)remaining;
 }

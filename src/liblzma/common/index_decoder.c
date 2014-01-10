@@ -305,9 +305,9 @@ lzma_index_buffer_decode(lzma_index **i, uint64_t *memlimit,
 {
 	// Sanity checks
 	if (i == NULL || memlimit == NULL
-			|| in == NULL || in_pos == NULL || *in_pos > in_size)
+			|| in == NULL || in_pos == NULL || *in_pos > in_size) {
 		return LZMA_PROG_ERROR;
-
+	}
 	// Initialize the decoder.
 	lzma_coder coder;
 	return_if_error(index_decoder_reset(&coder, allocator, i, *memlimit));

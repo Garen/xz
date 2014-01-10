@@ -1032,9 +1032,9 @@ extern lzma_ret
 lzma_lzma_props_decode(void **options, const lzma_allocator *allocator,
 		const uint8_t *props, size_t props_size)
 {
-	if (props_size != 5)
+	if (props_size != 5) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	lzma_options_lzma *opt
 			= lzma_alloc(sizeof(lzma_options_lzma), allocator);
 	if (opt == NULL)

@@ -20,9 +20,9 @@ lzma_simple_props_decode(void **options, const lzma_allocator *allocator,
 	if (props_size == 0)
 		return LZMA_OK;
 
-	if (props_size != 4)
+	if (props_size != 4) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	lzma_options_bcj *opt = lzma_alloc(
 			sizeof(lzma_options_bcj), allocator);
 	if (opt == NULL)

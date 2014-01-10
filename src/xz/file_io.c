@@ -21,10 +21,27 @@
 static bool warn_fchown;
 #endif
 
-#if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMES)
+#if HAVE_SYS_TIME_H && (defined(HAVE_FUTIMES) || defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMES))
 #	include <sys/time.h>
+#elif _MSC_VER
+#   include <sys/types.h>
+#   include <sys/utime.h>
+#   include <time.h>
+#   include <winsock2.h>  // struct timeval
+#   define fileno _fileno
+#   define unlink _unlink
+#   define setmode _setmode
+#   define open _open
+#   define close _close
+#   define read _read
+#   define lseek _lseek
+#   define write _write
 #elif defined(HAVE_UTIME)
 #	include <utime.h>
+#endif
+
+#if !defined(mode_t) && _MSC_VER
+#define mode_t int
 #endif
 
 #include "tuklib_open_stdxxx.h"
@@ -397,17 +414,17 @@ io_open_src_real(file_pair *pair)
 		stdin_flags = fcntl(STDIN_FILENO, F_GETFL);
 		if (stdin_flags == -1) {
 			message_error(_("Error getting the file status flags "
-					"from standard input: %s"),
-					strerror(errno));
+				"from standard input: %s"),
+				strerror(errno));
 			return true;
 		}
 
 		if ((stdin_flags & O_NONBLOCK) == 0) {
 			if (fcntl(STDIN_FILENO, F_SETFL,
-					stdin_flags | O_NONBLOCK) == -1) {
+				stdin_flags | O_NONBLOCK) == -1) {
 				message_error(_("Error setting O_NONBLOCK "
-						"on standard input: %s"),
-						strerror(errno));
+					"on standard input: %s"),
+					strerror(errno));
 				return true;
 			}
 
@@ -453,12 +470,12 @@ io_open_src_real(file_pair *pair)
 		struct stat st;
 		if (lstat(pair->src_name, &st)) {
 			message_error("%s: %s", pair->src_name,
-					strerror(errno));
+				strerror(errno));
 			return true;
 
 		} else if (S_ISLNK(st.st_mode)) {
 			message_warning(_("%s: Is a symbolic link, "
-					"skipping"), pair->src_name);
+				"skipping"), pair->src_name);
 			return true;
 		}
 	}
@@ -511,7 +528,7 @@ io_open_src_real(file_pair *pair)
 			const int saved_errno = errno;
 			struct stat st;
 			if (lstat(pair->src_name, &st) == 0
-					&& S_ISLNK(st.st_mode))
+				&& S_ISLNK(st.st_mode))
 				was_symlink = true;
 
 			errno = saved_errno;
@@ -520,14 +537,14 @@ io_open_src_real(file_pair *pair)
 
 		if (was_symlink)
 			message_warning(_("%s: Is a symbolic link, "
-					"skipping"), pair->src_name);
+			"skipping"), pair->src_name);
 		else
 #endif
 			// Something else than O_NOFOLLOW failing
 			// (assuming that the race conditions didn't
 			// confuse us).
 			message_error("%s: %s", pair->src_name,
-					strerror(errno));
+			strerror(errno));
 
 		return true;
 	}
@@ -623,9 +640,9 @@ error:
 extern file_pair *
 io_open_src(const char *src_name)
 {
-	if (is_empty_filename(src_name))
+	if (is_empty_filename(src_name)) {
 		return NULL;
-
+	}
 	// Since we have only one file open at a time, we can use
 	// a statically allocated structure.
 	static file_pair pair;
@@ -770,7 +787,11 @@ io_open_dest_real(file_pair *pair)
 #ifndef TUKLIB_DOSLIKE
 		flags |= O_NONBLOCK;
 #endif
+#ifdef _MSC_VER
+		const mode_t mode = _S_IREAD | _S_IWRITE;
+#elif
 		const mode_t mode = S_IRUSR | S_IWUSR;
+#endif
 		pair->dest_fd = open(pair->dest_name, flags, mode);
 
 		if (pair->dest_fd == -1) {

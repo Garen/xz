@@ -100,9 +100,9 @@ alone_encoder_init(lzma_next_coder *next, const lzma_allocator *allocator,
 		return LZMA_OPTIONS_ERROR;
 
 	// - Dictionary size (4 bytes)
-	if (options->dict_size < LZMA_DICT_SIZE_MIN)
+	if (options->dict_size < LZMA_DICT_SIZE_MIN) {
 		return LZMA_OPTIONS_ERROR;
-
+	}
 	// Round up to the next 2^n or 2^n + 2^(n - 1) depending on which
 	// one is the next unless it is UINT32_MAX. While the header would
 	// allow any 32-bit integer, we do this to keep the decoder of liblzma

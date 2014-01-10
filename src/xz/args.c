@@ -58,9 +58,9 @@ static void
 parse_block_list(char *str)
 {
 	// It must be non-empty and not begin with a comma.
-	if (str[0] == '\0' || str[0] == ',')
+	if (str[0] == '\0' || str[0] == ',') {
 		message_fatal(_("%s: Invalid argument to --block-list"), str);
-
+	}
 	// Count the number of comma-separated strings.
 	size_t count = 1;
 	for (size_t i = 0; str[i] != '\0'; ++i)

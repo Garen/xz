@@ -54,9 +54,9 @@ lzma_mf_find(lzma_mf *mf, uint32_t *count_ptr, lzma_match *matches)
 			// encoder or the number of bytes left in the
 			// dictionary, whichever is smaller.
 			uint32_t limit = mf_avail(mf) + 1;
-			if (limit > mf->match_len_max)
+			if (limit > mf->match_len_max) {
 				limit = mf->match_len_max;
-
+			}
 			// Pointer to the byte we just ran through
 			// the match finder.
 			const uint8_t *p1 = mf_ptr(mf) - 1;
@@ -261,9 +261,9 @@ hc_find_func(
 
 	while (true) {
 		const uint32_t delta = pos - cur_match;
-		if (depth-- == 0 || delta >= cyclic_size)
+		if (depth-- == 0 || delta >= cyclic_size) {
 			return matches;
-
+		}
 		const uint8_t *const pb = cur - delta;
 		cur_match = son[cyclic_pos - delta
 				+ (delta > cyclic_pos ? cyclic_size : 0)];

@@ -126,9 +126,9 @@ alone_decode(lzma_coder *coder,
 	// Fall through
 
 	case SEQ_CODER_INIT: {
-		if (coder->memusage > coder->memlimit)
+		if (coder->memusage > coder->memlimit) {
 			return LZMA_MEMLIMIT_ERROR;
-
+		}
 		lzma_filter_info filters[2] = {
 			{
 				.init = &lzma_lzma_decoder_init,

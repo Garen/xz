@@ -7,6 +7,8 @@
 *.la
 *.lo
 *.o
+*.obj
+*.aps
 Makefile.in
 
 /ABOUT-NLS
@@ -62,3 +64,11 @@ build-aux/missing
 /src/liblzma/api/Makefile
 /src/lzmainfo/Makefile
 /src/xzdec/Makefile
+
+/windows/debug
+/windows/release
+/windows/*.suo
+/windows/*.sdf
+/windows/*.opensdf
+/windows/x64/*
+/windows/**/*.tlog/*
